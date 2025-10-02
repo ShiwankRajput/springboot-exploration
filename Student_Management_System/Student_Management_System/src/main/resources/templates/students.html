@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+	<meta charset="UTF-8">
+	<title>Student Management System</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+	<!-- Navigation Bar -->
+	
+	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+	
+  		<!-- Brand -->
+  		<a class="navbar-brand" href="#">Student Management Student</a>
+
+  		<!-- Toggle Button -->
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    			<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<!-- Navigation bar links -->
+  		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+    			<ul class="navbar-nav">
+      			<li class="nav-item">
+        				<a class="nav-link" th:href="@{/students}">Manage Students</a>
+      			</li>
+    			</ul>
+  		</div>
+	</nav>
+	
+	<br>
+	
+	
+	
+	<!-- Student Table -->>
+
+	<div class="container">
+	
+		<div class="box">
+			<h1 style="text-align:center">Student List</h1>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-3">
+				<a th:href="@{/students/new}" class="btn btn-primary btn-sm mb-3">Add Student</a>
+			</div>
+		</div>
+		
+		<table class="table table-stripped table-hover table-bordered">
+		
+			<thead class="table-dark">
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Email</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="student : ${students}">
+					<td th:text="${student.firstName}"></td>
+					<td th:text="${student.lastName}"></td>
+					<td th:text="${student.email}"></td>
+					<td>
+						<a th:href="@{/students/edit/{id}(id=${student.id})}" class="btn btn-warning me-3">Update</a>
+						<a th:href="@{/students/{id}(id=${student.id})}" class="btn btn-danger me-3">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+			
+		</table>
+	
+	</div>
+
+</body>
+</html>

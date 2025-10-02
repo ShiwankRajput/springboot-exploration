@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+	<meta charset="UTF-8">
+	<title>Student Management System</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+
+	<!-- Navigation Bar -->
+	
+	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+	
+  		<!-- Brand -->
+  		<a class="navbar-brand" href="#">Student Management Student</a>
+
+  		<!-- Toggle Button -->
+  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    			<span class="navbar-toggler-icon"></span>
+  		</button>
+
+  		<!-- Navigation bar links -->
+  		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+    			<ul class="navbar-nav">
+      			<li class="nav-item">
+        				<a class="nav-link" th:href="@{/students}">Manage Students</a>
+      			</li>
+    			</ul>
+  		</div>
+	</nav>
+	
+	<br>
+	<br>
+
+
+	<!-- Form for adding student data -->>
+	
+	<div class="container">
+	
+		<div class="row">
+		
+			<div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+			
+				<h1 class="text-center">Update Existing Student</h1>
+				
+				<div class="card-body">
+				
+					<form th:action="@{/students/{id}(id=${student.id})}" th:object="${student}" method="POST">
+					
+						<div class="form-group">
+							<label>First Name : </label>
+							<input
+							type="text"
+							name="firstName"
+							class="form-control"
+							th:field="*{firstName}"
+							placeholder="Enter student first name"	
+							/>
+							<span style="color:red" th:if="${#fields.hasErrors('firstName')}"
+								  th:errors="*{firstName}">
+							</span>
+						</div>
+						
+						<br>
+						
+						<div class="form-group">
+							<label>Last Name : </label>
+							<input
+							type="text"
+							name="lastName"
+							class="form-control"
+							th:field="*{lastName}"
+							placeholder="Enter student last name"	
+							/>
+							<span style="color:red" th:if="${#fields.hasErrors('lastName')}"
+								  th:errors="*{lastName}">
+							</span>
+						</div>
+						
+						<br>
+						
+						<div class="form-group">
+							<label>Email : </label>
+							<input
+							type="text"
+							name="email"
+							class="form-control"
+							th:field="*{email}"
+							placeholder="Enter student email"	
+							/>
+							<span style="color:red" th:if="${#fields.hasErrors('email')}"
+								  th:errors="*{email}">
+							</span>
+						</div>
+						
+						<br>
+						
+						<div class="footer-body">
+							<button type="submit" class="btn btn-primary">
+								Submit
+							</button>
+						</div>
+						
+					</form>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+</body>
+</html>
