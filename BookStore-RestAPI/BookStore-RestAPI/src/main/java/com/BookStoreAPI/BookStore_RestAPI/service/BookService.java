@@ -30,6 +30,14 @@ public class BookService {
 		return existingBook;
 	}
 	
+	public void updateBook(long id, Book book) {
+		Book existingBook = repository.findById(id).get();
+		existingBook.setTitle(book.getTitle());
+		existingBook.setAuthor(book.getAuthor());
+		existingBook.setPrice(book.getPrice());
+		repository.save(existingBook);
+	}
+	
 	public void deleteSpecificBook(long id) {
 		repository.deleteById(id);
 	}

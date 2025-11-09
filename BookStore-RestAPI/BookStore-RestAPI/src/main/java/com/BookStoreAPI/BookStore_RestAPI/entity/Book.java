@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Book {
@@ -12,8 +14,13 @@ public class Book {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
+	@NotBlank(message = "Book Title cannot be empty")
 	private String title;
+
+	@NotBlank(message = "Book Author cannot be empty")
 	private String author;
+	
+	@Positive(message = "Price must be greater than zero")
 	private double price;
 	
 	public Book() {

@@ -8,13 +8,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.BookStoreAPI.BookStore_RestAPI.entity.Book;
+import com.BookStoreAPI.BookStore_RestAPI.exception.UserNotFoundException;
 import com.BookStoreAPI.BookStore_RestAPI.service.BookService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/bookStore")
@@ -32,7 +36,7 @@ public class BookController {
 	}
 	
 	@PostMapping("/books")
-	public ResponseEntity<Book> createNewBook(@RequestBody Book book) {
+	public ResponseEntity<Book> createNewBook(@Valid @RequestBody Book book) {
 		service.EnterNewBook(book);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -44,7 +48,14 @@ public class BookController {
 	
 	@GetMapping("/books/{id}")
 	public Book getBookById(@PathVariable long id) {
-		return service.getSpecificBook(id).get();
+		return service.getSpecificBook(id)
+				.orElseThrow(() -> 
+					new UserNotFoundException("Cannot found user by id -> " + id));
+	}
+	
+	@PutMapping("/books/{id}")
+	public void updateBookById(@PathVariable long id, @Valid @RequestBody Book book) {
+		service.updateBook(id,book);
 	}
 	
 	@DeleteMapping("/books/{id}")
