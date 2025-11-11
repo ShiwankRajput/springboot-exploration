@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import RecipeCard from "../components/RecipeCard";
+import SearchBar from "../components/SearchBar";
 
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
@@ -40,93 +41,55 @@ export default function Home() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-        padding: "40px 20px",
-      }}
-    >
-      <div className="container">
-
-        {/* Heading */}
-        <h1 className="text-center text-white fw-bold mb-4">
-          Explore <span style={{ color: "#ffe082" }}>Recipes</span>
-        </h1>
-
-        {/* Search Bar */}
-        <div className="d-flex justify-content-center mb-4">
-          <input
-            type="text"
-            placeholder="Search recipes by title..."
-            className="form-control shadow-sm"
-            style={{
-              maxWidth: "500px",
-              borderRadius: "12px",
-              padding: "12px",
-            }}
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
+    <div className="min-vh-100 bg-light">
+      <div className="container py-5">
+        {/* Header */}
+        <div className="text-center mb-5">
+          <div className="bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+               style={{width: '80px', height: '80px'}}>
+            <span className="fs-2">🍳</span>
+          </div>
+          <h1 className="display-5 fw-bold text-dark mb-3">
+            Discover Recipes
+          </h1>
+          <p className="text-muted fs-5">
+            Explore and manage your culinary creations
+          </p>
         </div>
 
-        {/* Loading */}
-        {loading ? (
-          <div className="text-center mt-5">
-            <div className="spinner-border text-light" role="status"></div>
-            <p className="mt-2 text-white fw-semibold">Loading recipes...</p>
+        {/* Search Bar */}
+        <SearchBar searchTerm={searchTerm} setSearchTerm={handleSearch} />
+
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-5">
+            <div className="spinner-border text-dark" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <p className="mt-3 text-muted">Loading recipes...</p>
           </div>
-        ) : (
+        )}
+
+        {/* Recipes Grid */}
+        {!loading && (
           <>
-            {/* No Recipes */}
             {filteredRecipes.length === 0 ? (
-              <p className="text-center text-light fs-5 fw-bold">
-                ⚠️ No recipes found.
-              </p>
+              <div className="text-center py-5">
+                <div className="card border-0 bg-white shadow-sm mx-auto" style={{maxWidth: '400px'}}>
+                  <div className="card-body py-5">
+                    <div className="text-muted mb-3 fs-1">📝</div>
+                    <h5 className="text-dark mb-3">No recipes found</h5>
+                    <p className="text-muted mb-0">
+                      {searchTerm ? 'Try different search terms' : 'Get started by adding your first recipe'}
+                    </p>
+                  </div>
+                </div>
+              </div>
             ) : (
-              <div className="row">
+              <div className="row g-4">
                 {filteredRecipes.map((recipe) => (
-                  <div className="col-md-4 mb-4" key={recipe.id}>
-                    <div
-                      className="card shadow-lg border-0 p-3"
-                      style={{
-                        borderRadius: "20px",
-                        background: "rgba(255,255,255,0.15)",
-                        backdropFilter: "blur(15px)",
-                        color: "white",
-                        minHeight: "350px",
-                      }}
-                    >
-                      <h4 className="fw-bold">{recipe.title}</h4>
-
-                      <h6 className="mt-3" style={{ color: "#ffe082" }}>
-                        Ingredients:
-                      </h6>
-                      <ul style={{ paddingLeft: "20px" }}>
-                        {recipe.ingredients.map((ing, index) => (
-                          <li key={index}>{ing}</li>
-                        ))}
-                      </ul>
-
-                      <h6 className="mt-3" style={{ color: "#ffe082" }}>
-                        Instructions:
-                      </h6>
-                      <ul style={{ paddingLeft: "20px" }}>
-                        {recipe.instructions.map((inst, index) => (
-                          <li key={index}>{inst}</li>
-                        ))}
-                      </ul>
-
-                      <div className="text-center mt-3">
-                        <Link
-                          to={`/edit/${recipe.id}`}
-                          className="btn btn-warning fw-bold px-4"
-                          style={{ borderRadius: "12px" }}
-                        >
-                          Edit
-                        </Link>
-                      </div>
-                    </div>
+                  <div className="col-lg-6 col-xl-4" key={recipe.id}>
+                    <RecipeCard recipe={recipe} />
                   </div>
                 ))}
               </div>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function EditRecipe() {
+export default function EditRecipe() {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -36,9 +36,10 @@ function EditRecipe() {
   };
 
   const removeListItem = (index, type) => {
-    const newList = [...recipe[type]];
-    newList.splice(index, 1);
-    setRecipe({ ...recipe, [type]: newList });
+    if (recipe[type].length > 1) {
+      const newList = recipe[type].filter((_, i) => i !== index);
+      setRecipe({ ...recipe, [type]: newList });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -53,103 +54,122 @@ function EditRecipe() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="card shadow-lg p-4 border-0" style={{ borderRadius: 20 }}>
-        <h2 className="text-center mb-4">Edit Recipe</h2>
-        
-        <form onSubmit={handleSubmit}>
-          
-          {/* Title */}
-          <div className="mb-3">
-            <label className="form-label fw-bold">Recipe Title</label>
-            <input
-              type="text"
-              name="title"
-              className="form-control"
-              value={recipe.title}
-              onChange={handleChange}
-              required
-              placeholder="Enter recipe title"
-            />
-          </div>
-
-          {/* Ingredients */}
-          <div className="mb-3">
-            <label className="form-label fw-bold">Ingredients</label>
-            {recipe.ingredients.map((item, index) => (
-              <div className="input-group mb-2" key={index}>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={item}
-                  onChange={(e) =>
-                    handleListChange(index, "ingredients", e.target.value)
-                  }
-                  placeholder={`Ingredient ${index + 1}`}
-                />
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={() => removeListItem(index, "ingredients")}
-                  disabled={recipe.ingredients.length === 1}
-                >
-                  X
-                </button>
+    <div className="min-vh-100 bg-light py-5">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-8 col-xl-6">
+            <div className="card shadow-lg border-0">
+              <div className="card-header bg-white py-4 border-0">
+                <div className="text-center">
+                  <div className="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                       style={{width: '60px', height: '60px'}}>
+                    <span className="text-dark fs-4">✏️</span>
+                  </div>
+                  <h2 className="text-dark fw-bold mb-0">Edit Recipe</h2>
+                </div>
               </div>
-            ))}
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={() => addListItem("ingredients")}
-            >
-              + Add Ingredient
-            </button>
-          </div>
+              
+              <div className="card-body p-4">
+                <form onSubmit={handleSubmit}>
+                  
+                  {/* Title */}
+                  <div className="mb-4">
+                    <label className="form-label fw-semibold text-dark">Recipe Title</label>
+                    <input
+                      type="text"
+                      name="title"
+                      className="form-control form-control-lg border-0 shadow-sm rounded-2"
+                      style={{background: '#f8f9fa'}}
+                      value={recipe.title}
+                      onChange={handleChange}
+                      required
+                      placeholder="Enter recipe title"
+                    />
+                  </div>
 
-          {/* Instructions */}
-          <div className="mb-3">
-            <label className="form-label fw-bold">Instructions</label>
-            {recipe.instructions.map((item, index) => (
-              <div className="input-group mb-2" key={index}>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={item}
-                  onChange={(e) =>
-                    handleListChange(index, "instructions", e.target.value)
-                  }
-                  placeholder={`Instruction step ${index + 1}`}
-                />
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={() => removeListItem(index, "instructions")}
-                  disabled={recipe.instructions.length === 1}
-                >
-                  X
-                </button>
+                  {/* Ingredients */}
+                  <div className="mb-4">
+                    <label className="form-label fw-semibold text-dark">Ingredients</label>
+                    {recipe.ingredients.map((item, index) => (
+                      <div className="d-flex mb-2" key={index}>
+                        <input
+                          type="text"
+                          className="form-control border-0 shadow-sm rounded-2 me-2"
+                          style={{background: '#f8f9fa'}}
+                          value={item}
+                          onChange={(e) =>
+                            handleListChange(index, "ingredients", e.target.value)
+                          }
+                          placeholder={`Ingredient ${index + 1}`}
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger border-0 rounded-2"
+                          style={{width: '50px'}}
+                          onClick={() => removeListItem(index, "ingredients")}
+                          disabled={recipe.ingredients.length === 1}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="btn btn-outline-dark rounded-pill mt-2"
+                      onClick={() => addListItem("ingredients")}
+                    >
+                      Add Ingredient
+                    </button>
+                  </div>
+
+                  {/* Instructions */}
+                  <div className="mb-4">
+                    <label className="form-label fw-semibold text-dark">Instructions</label>
+                    {recipe.instructions.map((item, index) => (
+                      <div className="d-flex mb-2" key={index}>
+                        <input
+                          type="text"
+                          className="form-control border-0 shadow-sm rounded-2 me-2"
+                          style={{background: '#f8f9fa'}}
+                          value={item}
+                          onChange={(e) =>
+                            handleListChange(index, "instructions", e.target.value)
+                          }
+                          placeholder={`Instruction step ${index + 1}`}
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger border-0 rounded-2"
+                          style={{width: '50px'}}
+                          onClick={() => removeListItem(index, "instructions")}
+                          disabled={recipe.instructions.length === 1}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="btn btn-outline-dark rounded-pill mt-2"
+                      onClick={() => addListItem("instructions")}
+                    >
+                      Add Instruction
+                    </button>
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="text-center mt-4 pt-3">
+                    <button className="btn btn-warning btn-lg px-5 rounded-pill fw-semibold text-dark" type="submit">
+                      Update Recipe
+                    </button>
+                  </div>
+
+                </form>
               </div>
-            ))}
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={() => addListItem("instructions")}
-            >
-              + Add Instruction
-            </button>
+            </div>
           </div>
-
-          {/* Submit Button */}
-          <div className="text-center mt-4">
-            <button className="btn btn-primary px-4 py-2" type="submit">
-              Update Recipe
-            </button>
-          </div>
-
-        </form>
+        </div>
       </div>
     </div>
   );
 }
-
-export default EditRecipe;
