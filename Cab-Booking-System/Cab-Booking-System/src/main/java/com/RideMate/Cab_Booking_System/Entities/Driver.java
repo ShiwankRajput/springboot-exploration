@@ -8,6 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Driver {
@@ -16,14 +19,17 @@ public class Driver {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@Size(min=2, message="Name must contains atleast 2 characters")
 	private String name;
 	
+	@DecimalMin("1.0")
+	@DecimalMax("5.0")
 	private Double rating;
 	
 	@OneToMany(mappedBy="driver", cascade=CascadeType.ALL)
 	private List<Ride> rides;
 	
-	public Driver() {
+	public Driver() { 
 		
 	}
 	
