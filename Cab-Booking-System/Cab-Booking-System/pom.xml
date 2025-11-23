@@ -38,6 +38,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		
+		<!-- Content Negotiation for XML output -->
+		<dependency>
+    			<groupId>com.fasterxml.jackson.dataformat</groupId>
+    			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+
+		
+		<dependency>
+    			<groupId>org.springframework.boot</groupId>
+    			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
