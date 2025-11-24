@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -22,6 +23,7 @@ public class Driver {
 	@Size(min=2, message="Name must contains atleast 2 characters")
 	private String name;
 	
+	@NotNull
 	@DecimalMin("1.0")
 	@DecimalMax("5.0")
 	private Double rating;

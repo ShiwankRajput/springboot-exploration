@@ -16,6 +16,8 @@ public class Ride {
 	
 	private String pickUp;
 	
+	private Double fare;
+	
 	private String dropLocation;
 	
 	@ManyToOne
@@ -30,10 +32,12 @@ public class Ride {
 		
 	}
 
-	public Ride(Integer id, String pickUp, String dropLocation, User user, Driver driver) {
+	public Ride(Integer id, String pickUp, Double fare, String dropLocation, 
+			User user, Driver driver) {
 		super();
 		this.id = id;
 		this.pickUp = pickUp;
+		this.fare = fare;
 		this.dropLocation = dropLocation;
 		this.user = user;
 		this.driver = driver;
@@ -53,6 +57,14 @@ public class Ride {
 
 	public void setPickUp(String pickUp) {
 		this.pickUp = pickUp;
+	}
+
+	public Double getFare() {
+		return fare;
+	}
+
+	public void setFare(Double fare) {
+		this.fare = fare;
 	}
 
 	public String getDropLocation() {

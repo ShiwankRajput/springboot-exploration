@@ -47,6 +47,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		
 	}
 	
+	@ExceptionHandler(RideNotFoundException.class)
+	public ResponseEntity<ErrorDetails> handleRideNotFoundException(Exception ex, WebRequest request){
+		
+		ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),
+				ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+		
+	}
+	
 	@Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status,
