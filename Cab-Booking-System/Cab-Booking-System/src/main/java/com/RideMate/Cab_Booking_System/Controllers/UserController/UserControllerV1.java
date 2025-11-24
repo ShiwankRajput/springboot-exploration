@@ -39,7 +39,7 @@ public class UserControllerV1 {
         MappingJacksonValue mapping = new MappingJacksonValue(users);
 
         SimpleFilterProvider filters = new SimpleFilterProvider()
-                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id","name","phone"));
 
         mapping.setFilters(filters);
         return mapping;
@@ -52,7 +52,7 @@ public class UserControllerV1 {
         MappingJacksonValue mapping = new MappingJacksonValue(user);
 
         SimpleFilterProvider filters = new SimpleFilterProvider()
-                .addFilter("UserFilter", SimpleBeanPropertyFilter.serializeAll());
+                .addFilter("UserFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id","name","phone"));
 
         mapping.setFilters(filters);
         return mapping;

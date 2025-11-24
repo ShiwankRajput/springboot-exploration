@@ -2,6 +2,8 @@ package com.RideMate.Cab_Booking_System.Entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +15,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+@JsonFilter("DriverFilter")
 @Entity
 public class Driver {
 

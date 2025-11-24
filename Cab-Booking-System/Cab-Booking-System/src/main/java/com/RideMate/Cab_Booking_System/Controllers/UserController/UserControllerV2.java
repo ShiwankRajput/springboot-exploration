@@ -55,7 +55,7 @@ public class UserControllerV2 {
 				
 		SimpleFilterProvider filters = new SimpleFilterProvider().
 				addFilter("UserFilter", SimpleBeanPropertyFilter.
-						filterOutAllExcept("id","name","rides"));
+						filterOutAllExcept("id","name"));
 		
 		MappingJacksonValue mapping = new MappingJacksonValue(user);
 		

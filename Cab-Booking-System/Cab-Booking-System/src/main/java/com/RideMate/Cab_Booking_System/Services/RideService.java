@@ -24,8 +24,11 @@ public class RideService {
 	
 	private DriverRepository driverRepository;
 	
-	public RideService(RideRepository repository) {
+	public RideService(RideRepository repository, UserRepository userRepository,
+			DriverRepository driverRepository) {
 		this.repository = repository;
+		this.userRepository = userRepository;
+		this.driverRepository = driverRepository;
 	}
 	
 	
