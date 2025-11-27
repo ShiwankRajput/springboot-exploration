@@ -1,20 +1,53 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import AddRecipe from "./pages/AddRecipe";
-import EditRecipe from "./pages/EditRecipe";
-import About from "./pages/About";
+// src/App.jsx
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoutes';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import AllRecipes from './pages/AllRecipes';
+import MyRecipes from './pages/MyRecipes';
+import AddRecipe from './pages/AddRecipe';
+import './App.css';
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/add" element={<AddRecipe />} />
-        <Route path="/edit/:id" element={<EditRecipe />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <div className="App">
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/recipes" element={<AllRecipes />} />
+            
+            {/* Protected Routes */}
+            <Route 
+              path="/my-recipes" 
+              element={
+                <ProtectedRoute>
+                  <MyRecipes />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/add-recipe" 
+              element={
+                <ProtectedRoute>
+                  <AddRecipe />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Redirect to home for unknown routes */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
+      </div>
+    </AuthProvider>
   );
 }
+
+export default App;

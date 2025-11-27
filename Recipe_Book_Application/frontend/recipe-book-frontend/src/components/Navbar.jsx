@@ -1,45 +1,78 @@
-import { Link } from "react-router-dom";
+// src/components/Navbar.jsx
+import { useAuth } from '../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+const Navbar = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
-        <Link className="navbar-brand fw-bold fs-3 d-flex align-items-center" to="/">
-          <span className="bg-success rounded-circle p-2 me-2 d-flex align-items-center justify-content-center" style={{width: '40px', height: '40px'}}>
-            <span className="text-white">R</span>
-          </span>
-          RecipeBook
+        <Link className="navbar-brand fw-bold" to="/">
+          🍳 RecipeBook
         </Link>
-
-        <button
-          className="navbar-toggler border-0"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navItems"
+        
+        <button 
+          className="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarNav"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-
-        <div className="collapse navbar-collapse" id="navItems">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item mx-2">
-              <Link className="nav-link fw-medium px-3 py-2 rounded" to="/">
-                Home
-              </Link>
+        
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav me-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">All Recipes</Link>
             </li>
-            <li className="nav-item mx-2">
-              <Link className="nav-link fw-medium px-3 py-2 rounded" to="/add">
-                Add Recipe
-              </Link>
-            </li>
-            <li className="nav-item mx-2">
-              <Link className="nav-link fw-medium px-3 py-2 rounded" to="/about">
-                About
-              </Link>
-            </li>
+            {user && (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/my-recipes">My Recipes</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/add-recipe">Add Recipe</Link>
+                </li>
+              </>
+            )}
+          </ul>
+          
+          <ul className="navbar-nav">
+            {user ? (
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  👋 Hello, {user.username}
+                </a>
+                <ul className="dropdown-menu">
+                  <li>
+                    <button className="dropdown-item" onClick={handleLogout}>
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </li>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">Login</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/register">Register</Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
     </nav>
   );
-}
+};
+
+export default Navbar;
