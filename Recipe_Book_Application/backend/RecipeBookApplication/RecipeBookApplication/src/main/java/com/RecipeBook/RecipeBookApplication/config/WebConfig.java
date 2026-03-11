@@ -8,6 +8,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -16,38 +17,42 @@ public class WebConfig implements WebMvcConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow all the frontend origins you might use
-        configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:3000",    // Vite default
-            "http://127.0.0.1:3000",    // Vite alternative
-            "http://localhost:5173",    // Vite alternative port
-            "http://127.0.0.1:5173"     // Vite alternative
-        ));
+        // For development, allow all origins. For production, specify exact origins.
+        configuration.setAllowedOriginPatterns(List.of("*")); // Using patterns for flexibility
         
-        // Allow all common HTTP methods
+        // Alternatively, if you want to specify exact origins:
+        // configuration.setAllowedOrigins(Arrays.asList(
+        //     "http://localhost:3000",
+        //     "http://localhost:5173",
+        //     "http://127.0.0.1:3000",
+        //     "http://127.0.0.1:5173"
+        // ));
+        
         configuration.setAllowedMethods(Arrays.asList(
             "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"
         ));
         
-        // Allow all headers
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        
-        // Expose these headers to the frontend
-        configuration.setExposedHeaders(Arrays.asList(
-            "Authorization", 
-            "Location",
-            "Content-Disposition"
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "X-Requested-With",
+            "Accept",
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
         ));
         
-        // Allow credentials (cookies, authorization headers)
-        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Credentials"
+        ));
         
-        // Cache preflight response for 1 hour
+        configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        
-        // Apply CORS configuration to all endpoints
         source.registerCorsConfiguration("/**", configuration);
         
         return source;

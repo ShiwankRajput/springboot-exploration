@@ -8,41 +8,19 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final CorsConfigurationSource corsConfigurationSource;
-
-    public SecurityConfig(CorsConfigurationSource corsConfigurationSource) {
-        this.corsConfigurationSource = corsConfigurationSource;
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Enable CORS with our configuration
-            .cors(cors -> cors.configurationSource(corsConfigurationSource))
-            
-            // Disable CSRF for stateless API
+            .cors(cors -> {}) // Enable CORS (will use WebConfig)
             .csrf(csrf -> csrf.disable())
-            
-            // Use stateless session management
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            
-            // Configure authorization
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Public endpoints - MATCH THE CASE (capital B)
-                .requestMatchers(
-                    "/api/recipeBook/auth/**",
-                    "/error"
-                ).permitAll()
-                
-                // All other endpoints require authentication
+                .requestMatchers("/api/recipeBook/auth/**").permitAll()
                 .anyRequest().authenticated()
             );
         

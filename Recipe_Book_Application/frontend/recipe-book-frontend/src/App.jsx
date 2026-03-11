@@ -41,7 +41,6 @@ function App() {
               } 
             />
             
-            {/* Redirect to home for unknown routes */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

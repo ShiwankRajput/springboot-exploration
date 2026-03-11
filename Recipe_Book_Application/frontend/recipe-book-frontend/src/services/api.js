@@ -19,8 +19,6 @@ api.interceptors.request.use(
     console.log('Full URL:', config.baseURL + config.url);
     console.log('Method:', config.method?.toUpperCase());
     console.log('Token exists:', !!token);
-    console.log('Token preview:', token ? token.substring(0, 20) + '...' : 'None');
-    console.log('========================');
     
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -28,6 +26,7 @@ api.interceptors.request.use(
     } else {
       console.log('No token found in localStorage');
     }
+    console.log('========================');
     
     return config;
   },
@@ -43,44 +42,32 @@ api.interceptors.response.use(
     console.log('=== API RESPONSE SUCCESS ===');
     console.log('URL:', response.config.url);
     console.log('Status:', response.status);
-    console.log('Data:', response.data);
     console.log('========================');
     return response;
   },
   (error) => {
     console.log('=== API RESPONSE ERROR ===');
     console.log('URL:', error.config?.url);
-    console.log('Full URL:', error.config?.baseURL + error.config?.url);
     console.log('Status:', error.response?.status);
-    console.log('Status Text:', error.response?.statusText);
     console.log('Error Message:', error.message);
-    console.log('Response Data:', error.response?.data);
     
-    // Network errors (CORS, connection refused, etc.)
-    if (error.code === 'NETWORK_ERROR' || error.code === 'ECONNREFUSED') {
-      console.log('Network error detected - check CORS and server connectivity');
-    }
-    
-    // CORS specific errors
-    if (error.message && error.message.includes('CORS')) {
-      console.log('CORS error detected - check backend CORS configuration');
-    }
-    
-    console.log('========================');
-    
-    // Handle authentication errors
+    // Only handle authentication errors for specific cases
     if (error.response?.status === 401 || error.response?.status === 403) {
-      console.log('Authentication error detected, clearing tokens');
-      localStorage.removeItem(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
+      console.log('Authentication error detected');
       
-      // Only redirect if not already on login page
-      if (window.location.pathname !== '/login' && window.location.pathname !== '/') {
-        console.log('Redirecting to login page');
+      // Don't redirect if we're already on login page or it's an auth request
+      const isAuthRequest = error.config?.url?.includes('/auth/');
+      const isLoginPage = window.location.pathname === '/login';
+      
+      if (!isAuthRequest && !isLoginPage) {
+        console.log('Clearing tokens and redirecting to login');
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
         window.location.href = '/login';
       }
     }
     
+    console.log('========================');
     return Promise.reject(error);
   }
 );
@@ -92,7 +79,7 @@ export const authAPI = {
   getProfile: () => api.get('/auth/profile'),
 };
 
-// Recipes API endpoints
+// Recipes API endpoints - FIXED PATHS
 export const recipesAPI = {
   getAllRecipes: () => api.get('/recipes'),
   getMyRecipes: () => api.get('/my-recipes'),
@@ -100,7 +87,6 @@ export const recipesAPI = {
   createRecipe: (recipeData) => api.post('/recipes', recipeData),
   updateRecipe: (id, recipeData) => api.put(`/recipes/${id}`, recipeData),
   deleteRecipe: (id) => api.delete(`/recipes/${id}`),
-  searchRecipes: (query) => api.get(`/recipes/search?q=${query}`),
 };
 
 // Health check endpoint to test connectivity

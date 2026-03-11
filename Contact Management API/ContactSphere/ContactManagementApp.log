@@ -1,0 +1,14 @@
+2026-02-03 21:55:54 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-03 21:55:55 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-04 13:48:22 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-04 13:48:24 [restartedMain] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-04 13:48:24 [restartedMain] WARN  o.s.b.s.a.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 4d9b60c7-2bf7-4cf7-a69e-b69102e9ea1e
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-02-04 13:49:34 [http-nio-8080-exec-3] WARN  c.C.C.controller.ContactController - Getting warned while fetching contacts from Server
+2026-02-04 13:49:34 [http-nio-8080-exec-3] ERROR c.C.C.controller.ContactController - Getting error while fetching contacts from Server
+2026-02-04 15:34:03 [http-nio-8080-exec-6] WARN  c.C.C.controller.ContactController - Getting warned while fetching contacts from Server
+2026-02-04 15:34:03 [http-nio-8080-exec-6] ERROR c.C.C.controller.ContactController - Getting error while fetching contacts from Server
