@@ -33,7 +33,7 @@ public class JournalEntryService {
 		journalEntry.setDate(LocalDateTime.now());
 		JournalEntry savedEntry = journalEntryRepository.save(journalEntry);
 		existingUser.getJournalEntries().add(savedEntry);
-		userService.saveUser(existingUser); 
+		userService.updateUser(existingUser); 
 		
 	}
 	
@@ -53,25 +53,38 @@ public class JournalEntryService {
 		return Optional.empty();
 	}
 	
-	public void deleteEntryById(ObjectId id, String userName) {
+	@Transactional
+	public boolean deleteEntryById(ObjectId id, String userName) {
 		
-		User existingUser = userService.findUserByUserName(userName);
-		boolean isRemoved = existingUser.getJournalEntries().removeIf(x -> x.getId().equals(id));
+		boolean isRemoved = false;
 		
-		if(isRemoved) {
-			userService.saveUser(existingUser);
-			journalEntryRepository.deleteById(id);
+		try {
+			User existingUser = userService.findUserByUserName(userName);
+			isRemoved = existingUser.getJournalEntries().removeIf(x -> x.getId().equals(id));
+			
+			if(isRemoved) {
+				userService.updateUser(existingUser);
+				journalEntryRepository.deleteById(id);
+			}
 		}
+		catch(Exception e) {
+			System.out.println(e);
+			throw new RuntimeException("An error occured while deleting the entry");
+		}
+		
+		return isRemoved;
 		
 	}
 	
-	public void updateEntryById(JournalEntry newEntry, ObjectId id, String userName) {
+	public boolean updateEntryById(JournalEntry newEntry, ObjectId id, String userName) {
+		
+		boolean isEntryExists = false;
 		
 		User existingUser = userService.findUserByUserName(userName);
 		
 		List<JournalEntry> journalEntries = existingUser.getJournalEntries();
 		
-		boolean isEntryExists = journalEntries.stream()
+		isEntryExists = journalEntries.stream()
 			.anyMatch(x -> x.getId().equals(id));
 		
 		if(isEntryExists) {
@@ -83,6 +96,8 @@ public class JournalEntryService {
 			});
 			
 		}
+		
+		return isEntryExists;
 		
 	}
 	

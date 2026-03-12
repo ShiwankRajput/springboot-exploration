@@ -37,7 +37,7 @@ public class UserController {
 		
 		existingUser.setUserName(user.getUserName());
 		existingUser.setPassword(user.getPassword());
-		userService.saveUser(existingUser);
+		userService.registerUser(existingUser);
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		

@@ -21,10 +21,20 @@ public class UserService {
 	
 	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
-	public void saveUser(User user) {
+	public void registerUser(User user) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRoles(Arrays.asList("USER"));
 		userRepository.save(user);
+	}
+	
+	public void registerAdmin(User user) {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setRoles(Arrays.asList("USER","ADMIN"));
+		userRepository.save(user);
+	}
+	
+	public void updateUser(User user){
+	    userRepository.save(user);
 	}
 	
 	public void deleteUserByUserName(String userName) {
