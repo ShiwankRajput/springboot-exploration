@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ShivnexEngineering.journalApp.entity.User;
+import com.ShivnexEngineering.journalApp.repository.JournalEntryRepository;
 import com.ShivnexEngineering.journalApp.repository.UserRepository;
 
 @Service
@@ -18,6 +19,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private JournalEntryRepository journalEntryRepository;
 	
 	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
@@ -38,7 +42,13 @@ public class UserService {
 	}
 	
 	public void deleteUserByUserName(String userName) {
-		userRepository.deleteByUserName(userName);
+
+	    User user = userRepository.findByUserName(userName);
+
+	    if (user != null) {
+	        journalEntryRepository.deleteAll(user.getJournalEntries());
+	        userRepository.delete(user);
+	    }
 	}
 	
 	public List<User> getAllUsers() {
