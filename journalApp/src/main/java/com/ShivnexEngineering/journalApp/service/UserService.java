@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +16,10 @@ import com.ShivnexEngineering.journalApp.entity.User;
 import com.ShivnexEngineering.journalApp.repository.JournalEntryRepository;
 import com.ShivnexEngineering.journalApp.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class UserService {
 
 	@Autowired
@@ -22,13 +27,19 @@ public class UserService {
 	
 	@Autowired
 	private JournalEntryRepository journalEntryRepository;
-	
+		
 	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	public void registerUser(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setRoles(Arrays.asList("USER"));
-		userRepository.save(user);
+		try {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setRoles(Arrays.asList("USER"));
+			userRepository.save(user);
+		}
+		catch(Exception e) {
+			log.error("Duplicate entry for {}", user.getUserName(), e);
+			log.debug("Duplicate entry for {}", user.getUserName(), e);
+		}
 	}
 	
 	public void registerAdmin(User user) {
