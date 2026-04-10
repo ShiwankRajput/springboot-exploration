@@ -3,8 +3,6 @@ package com.ShivnexEngineering.journalApp.service;
 import com.ShivnexEngineering.journalApp.externalApi.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,9 +20,27 @@ public class WeatherService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RedisService redisService;
+
     public WeatherResponse weatherReport(String city){
 
-        String url = finalApi.replace("apiKey", apiKey).replace("city", city);
+        WeatherResponse weatherResponse = redisService.get("weather_of_" + city, WeatherResponse.class);
+
+        if(weatherResponse != null){
+            return weatherResponse;
+        }
+        else {
+            String url = finalApi.replace("apiKey", apiKey).replace("city", city);
+            ResponseEntity<WeatherResponse> response = restTemplate.exchange(url, HttpMethod.GET, null, WeatherResponse.class);
+            WeatherResponse body = response.getBody();
+            if(body != null){
+                redisService.set("weather_of_" + city, body, 300l);
+            }
+            return body;
+        }
+
+
 
         /*
 
@@ -47,9 +63,6 @@ public class WeatherService {
 
          */
 
-        ResponseEntity<WeatherResponse> response = restTemplate.exchange(url, HttpMethod.GET, null, WeatherResponse.class);
-
-        return response.getBody();
     }
 
 }
